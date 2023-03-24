@@ -1,49 +1,3 @@
-# Gitim - Git improved
-
-## Prerequisites
-
-- git - https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
-- fzf - https://github.com/junegunn/fzf
-- bat - https://github.com/sharkdp/bat
-- gh  - https://cli.github.com/
-- tr  - (should be installed by default as part of coreutils)
-
-## Setup
-
-Download `git.sh` and place it in your `~/.bashrc.d` directory.
-
-Add the following lines to your `~/.bashrc` file:
-```bash
-if [ -d ~/.bashrc.d ]; then
- for rc in ~/.bashrc.d/*; do
-  if [ -f "$rc" ]; then
-   . "$rc"
-  fi
- done
-fi
-```
-Add the following line to your `~/.bashrc` file to get Ctrl+g to work:
-```bash
-bind '"\C-g":"git_improved\n"'
-```
-
-> Change the GITHUB_URL in the top of this script to your GitHub URL before use!
-
-## Usage
-
-Press `Ctrl+g` to run the script.
-
-or
-
-```
-$ gitim
-```
-
-## The script
-
-> Read the script before using it.
-
-```bash
 # README: Please read these comments before using this script
 
 # NOTE: Gitim: Git improved
@@ -267,4 +221,3 @@ git_improved(){
 # Make sure your alias doesn't conflict with other aliases or commands
 # ------------------------------
 alias gitim="git_improved"
-```
