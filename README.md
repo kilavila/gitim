@@ -29,6 +29,14 @@ bind '"\C-g":"git_improved\n"'
 
 > Change the GITHUB_URL in the top of this script to your GitHub URL before use!
 
+## FZF Config
+
+Add the following lines in your `~/.bashrc` file for a better experience with fzf:
+```bash
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+export FZF_DEFAULT_OPTS="--height 40% --margin 0.5% -1 --layout=reverse --multi --cycle --prompt='Search > ' --info=inline --border=top --color=border:bright-yellow --border-label='╢ FZF ╟' --border-label-pos=-3 --color=label:italic:bright-yellow --preview-label='╢ Preview ╟' --preview-label-pos=3 --preview='[[ \$(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || cat {}) 2> /dev/null | head -300'"
+```
+
 ## Usage
 
 Press `Ctrl+g` to run the script.
