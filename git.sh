@@ -51,10 +51,10 @@ COMMANDS="git add,git blame,git branch,git checkout,git commit,git fetch,git ini
 # Use 'Tab'/'Shift+Tab' to select/deselect multiple files
 # ------------------------------
 git_add(){
-  ADD_ALL=$(echo "Yes,No" | tr ',' '\n' | fzf --prompt='Confirm > ' --preview-window=hidden --border-label='╢ Git add ╟')
+  ADD_ALL=$(echo "Add all,Select files" | tr ',' '\n' | fzf --prompt='Confirm > ' --preview-window=hidden --border-label='╢ Git add ╟')
 
   if [ -z "$ADD_ALL" ]; then return
-  elif [[ "$ADD_ALL" == "Yes" ]]; then git add :/
+  elif [[ "$ADD_ALL" == "Add all" ]]; then git add :/
   else
     SELECTION=$(fzf --border-label='╢ Git add ╟')
     if [ -z "$SELECTION" ]; then return
@@ -121,8 +121,11 @@ git_commit(){
   # git commit
 }
 
-# TODO:
-# git_fetch(){}
+# INFO: GIT FETCH
+# Fetch changes from a remote repository
+git_fetch(){
+	git fetch
+}
 
 # INFO: GIT INIT
 # Initialize a repository on GitHub.com as well as a local repository
@@ -164,14 +167,39 @@ git_log(){
   git checkout "$ID"
 }
 
-# TODO:
-# git_merge(){}
+# INFO: GIT MERGE
+# Select a branch to merge into the currently checked out branch
+# Select a merge strategy to use for the merge
+git_merge(){
+  SELECTION=$(git branch -a | fzf --preview-window=hidden --border-label='╢ Git branch ╟')
+
+  if [ -z "$SELECTION" ]; then
+    return
+  fi
+
+  BRANCH=$(echo "$SELECTION" | sed -E 's/([^/]+\/[^/]+\/)?(\s+)?(\*\s+)?(.*)/\4/g')
+
+  STRATEGY=$(echo "Accept both changes,Accept all incoming changes,Accept all current changes" | tr ',' '\n' | fzf --prompt='Select > ' --preview-window=hidden --border-label='╢ Git merge ╟')
+
+  if [ -z "$STRATEGY" ]; then return
+  elif [[ "$STRATEGY" == "Accept both changes" ]]; then git merge "$BRANCH"
+  elif [[ "$STRATEGY" == "Accept all incoming changes" ]]; then git merge --strategy-option theirs "$BRANCH"
+  elif [[ "$STRATEGY" == "Accept all current changes" ]]; then git merge --strategy-option ours "$BRANCH"
+  fi
+
+  git merge "$BRANCH"
+}
+
+# INFO: GIT PULL
+# Pull changes from a remote repository
+git_pull(){
+  git pull
+}
 
 # TODO:
-# git_pull(){}
-
-# TODO:
-# git_push(){}
+git_push(){
+  git push || read -rp "Enter branch name to set upstream: " REPO && git push --set-upstream origin "$REPO"
+}
 
 # TODO:
 # git_rebase(){}
@@ -210,6 +238,9 @@ git_improved(){
   elif [[ "$COMMAND" == "git commit" ]]; then git_commit
   elif [[ "$COMMAND" == "git init" ]]; then git_init
   elif [[ "$COMMAND" == "git log" ]]; then git_log
+  elif [[ "$COMMAND" == "git merge" ]]; then git_merge
+  elif [[ "$COMMAND" == "git pull" ]]; then git_pull
+  elif [[ "$COMMAND" == "git push" ]]; then git_push
   elif [[ "$COMMAND" == "git reset" ]]; then git_reset
   else echo "$COMMAND"
   fi
